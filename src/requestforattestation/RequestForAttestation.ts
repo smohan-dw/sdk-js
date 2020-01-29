@@ -92,6 +92,7 @@ export default class RequestForAttestation implements IRequestForAttestation {
    *
    * @param claimInput - An `IClaim` object the request for attestation is built for.
    * @param identity - The Claimer's [Identity].
+<<<<<<< HEAD
    * @param legitimationsInput - Array of [AttestedClaim] objects of the Attester which the Claimer requests to include into the attestation as legitimations.
    * @param delegationIdInput - The id of the DelegationNode of the Attester, which should be used in the attestation.
    * @returns  A new [[RequestForAttestation]] object.
@@ -100,6 +101,13 @@ export default class RequestForAttestation implements IRequestForAttestation {
    *   claim,
    *   alice
    * );
+=======
+   * @param [legitimationsInput] - Array of [AttestedClaim] objects of the Attester which the Claimer requests to include into the attestation as legitimations.
+   * @param [delegationIdInput] - The id of the DelegationNode of the Attester, which should be used in the attestation
+   * @returns  A new [[RequestForAttestation]] object.
+   * @example ```javascript
+   * const requestForAttestation = RequestForAttestation.fromClaimAndIdentity(claim,alice,[],null);
+>>>>>>> chore: outsourced error throwing constructor inputchecks
    * ```
    */
   public static fromClaimAndIdentity(
@@ -160,7 +168,11 @@ export default class RequestForAttestation implements IRequestForAttestation {
    * ```
    */
   public constructor(requestForAttestationInput: IRequestForAttestation) {
+<<<<<<< HEAD
     RequestForAttestationUtils.errorCheck(requestForAttestationInput)
+=======
+    RequestForAttestation.constructorInputCheck(requestForAttestationInput)
+>>>>>>> chore: outsourced error throwing constructor inputchecks
     this.claim = requestForAttestationInput.claim
     this.claimOwner = requestForAttestationInput.claimOwner
     this.cTypeHash = requestForAttestationInput.cTypeHash
@@ -238,12 +250,16 @@ export default class RequestForAttestation implements IRequestForAttestation {
    *
    * @returns Whether the data is valid.
    * @example ```javascript
+<<<<<<< HEAD
    * const reqForAtt = RequestForAttestation.fromClaimAndIdentity(
    *   claim,
    *   alice,
    *   [],
    *   null
    * );
+=======
+   * const reqForAtt = RequestForAttestation.fromClaimAndIdentity(claim,alice,[],null);
+>>>>>>> chore: outsourced error throwing constructor inputchecks
    * reqForAtt.verifyData(); // returns true if the data is correct
    * ```
    */
@@ -402,5 +418,37 @@ export default class RequestForAttestation implements IRequestForAttestation {
     const root: Uint8Array =
       hashes.length === 1 ? hashes[0] : getHashRoot(hashes)
     return u8aToHex(root)
+  }
+
+  private static constructorInputCheck(
+    requestForAttestationInput: IRequestForAttestation
+  ): void {
+    if (
+      !requestForAttestationInput.claim ||
+      !requestForAttestationInput.legitimations ||
+      !requestForAttestationInput.claimOwner ||
+      !requestForAttestationInput.claimerSignature ||
+      !requestForAttestationInput.claimHashTree ||
+      !requestForAttestationInput.cTypeHash ||
+      !requestForAttestationInput.rootHash
+    ) {
+      throw new Error(
+        `Property Not Provided while building RequestForAttestation:\n
+          requestInput.claim:\n
+          ${requestForAttestationInput.claim}\n
+          requestInput.legitimations:\n
+          ${requestForAttestationInput.legitimations}\n
+          requestInput.claimOwner:\n
+          ${requestForAttestationInput.claimOwner}\n
+          requestInput.claimerSignature:\n
+          ${requestForAttestationInput.claimerSignature}
+          requestInput.claimHashTree:\n
+          ${requestForAttestationInput.claimHashTree}\n
+          requestInput.rootHash:\n
+          ${requestForAttestationInput.rootHash}\n
+          requestInput.cTypeHash:\n
+          ${requestForAttestationInput.cTypeHash}\n`
+      )
+    }
   }
 }
