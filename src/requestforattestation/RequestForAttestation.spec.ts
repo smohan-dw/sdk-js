@@ -11,7 +11,6 @@ import { CompressedAttestedClaim } from '../types/AttestedClaim'
 
 function buildRequestForAttestation(
   claimer: Identity,
-  ctype: string,
   contents: object,
   legitimations: AttestedClaim[]
 ): RequestForAttestation {
@@ -75,7 +74,6 @@ describe('RequestForAttestation', () => {
   it('verify request for attestation', async () => {
     const request: RequestForAttestation = buildRequestForAttestation(
       identityBob,
-      'ctype',
       {
         a: 'a',
         b: 'b',
@@ -97,7 +95,6 @@ describe('RequestForAttestation', () => {
   it('throws on wrong hash in claim hash tree', () => {
     const request: RequestForAttestation = buildRequestForAttestation(
       identityBob,
-      'ctype',
       {
         a: 'a',
         b: 'b',
@@ -254,7 +251,6 @@ describe('RequestForAttestation', () => {
   it('hides claim properties', () => {
     const request = buildRequestForAttestation(
       identityBob,
-      'ctype',
       { a: 'a', b: 'b' },
       []
     )
