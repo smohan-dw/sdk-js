@@ -11,6 +11,7 @@
  * @preferred
  */
 
+import { checkAddress } from '@polkadot/util-crypto'
 import IRequestForAttestation from '../types/RequestForAttestation'
 import TxStatus from '../blockchain/TxStatus'
 import { factory } from '../config/ConfigLog'
