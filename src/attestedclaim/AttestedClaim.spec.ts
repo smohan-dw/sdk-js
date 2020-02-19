@@ -1,4 +1,4 @@
-import * as crypto from '@polkadot/util-crypto';
+import * as crypto from '@polkadot/util-crypto'
 import Identity from '../identity/Identity'
 import AttestedClaim from './AttestedClaim'
 import AttestedClaimUtils from './AttestedClaim.utils'
@@ -8,7 +8,6 @@ import ICType from '../types/CType'
 import RequestForAttestation from '../requestforattestation/RequestForAttestation'
 import Claim from '../claim/Claim'
 import { CompressedAttestedClaim } from '../types/AttestedClaim'
-
 
 function buildAttestedClaim(
   claimer: Identity,
