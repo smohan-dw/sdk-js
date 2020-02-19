@@ -56,7 +56,6 @@ describe('RequestForAttestation', () => {
 
   const legitimationRequest: RequestForAttestation = buildRequestForAttestation(
     identityAlice,
-    'legitimationCtype',
     {},
     []
   )
@@ -110,7 +109,7 @@ describe('RequestForAttestation', () => {
   })
 
   it('hides the claim owner', () => {
-    const request = buildRequestForAttestation(identityBob, 'ctype', {}, [])
+    const request = buildRequestForAttestation(identityBob, {}, [])
     request.removeClaimOwner()
     expect(request.claimOwner.nonce).toBeUndefined()
     expect(request.claim.owner).toBeUndefined()
