@@ -32,7 +32,7 @@ export default class CType implements ICType {
   }
 
   public hash: ICType['hash']
-  public owner: ICType['owner'] | null
+  public owner: ICType['owner']
   public schema: ICType['schema']
 
   public constructor(cTypeInput: ICType) {
@@ -44,6 +44,18 @@ export default class CType implements ICType {
     } else {
       this.hash = cTypeInput.hash
     }
+  }
+
+  public static fromSchema(
+    schema: ICType['schema'],
+    owner?: Identity['address']
+  ): CType {
+    const ctypeInput: ICType = {
+      hash: '',
+      schema,
+      owner,
+    }
+    return CType.fromCType(ctypeInput)
   }
 
   public async store(identity: Identity): Promise<TxStatus> {

@@ -86,6 +86,17 @@ describe('CType', () => {
       return CType.fromCType(wrongRawCtype)
     }).toThrow()
   })
+  it('builds CType from schema', () => {
+    expect(CType.fromSchema(claimCtype.schema, claimCtype.owner)).toMatchObject(
+      claimCtype
+    )
+    expect(CType.fromSchema(claimCtype.schema)).toMatchObject(
+      CType.fromCType({
+        hash: claimCtype.hash,
+        schema: claimCtype.schema,
+      })
+    )
+  })
 })
 
 describe('blank ctypes', () => {
