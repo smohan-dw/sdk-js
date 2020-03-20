@@ -29,8 +29,10 @@ export function validateQuoteSchema(
   )
   if (!result && ajv.errors) {
     if (messages) {
-      ajv.errors.forEach((error: any) => {
-        messages.push(error.message)
+      ajv.errors.forEach((error: Ajv.ErrorObject) => {
+        if (error.message) {
+          messages.push(error.message)
+        }
       })
     }
   }
