@@ -35,13 +35,13 @@ describe('CType', () => {
   const fromRawCType: ICType = {
     schema: rawCType,
     owner: identityAlice.address,
-    hash: '',
+    hash: CTypeUtils.getHashForSchema(rawCType),
   }
 
   const fromCTypeModel: ICType = {
     schema: ctypeModel,
     owner: identityAlice.address,
-    hash: '',
+    hash: CTypeUtils.getHashForSchema(ctypeModel),
   }
   const claimCtype = CType.fromCType(fromRawCType)
 
@@ -87,21 +87,31 @@ describe('CType', () => {
     expect(result.type).toEqual(resultTxStatus.type)
     expect(result.payload).toMatchObject(resultCtype)
   })
+
   it('verifies the claim structure', () => {
     expect(claimCtype.verifyClaimStructure(claim)).toBeTruthy()
     // @ts-ignore
     claim.contents.name = 123
     expect(claimCtype.verifyClaimStructure(claim)).toBeFalsy()
   })
-  it('throws error on wrong ctype hash', () => {
-    const wrongRawCtype = {
+
+  it('throws error on faulty input', () => {
+    const wrongHashCtype = {
       ...fromRawCType,
       hash: '0x1234',
     }
+    const faultySchemaCtype = {
+      ...fromRawCType,
+      schema: { ...rawCType, properties: null },
+    }
     expect(() => {
-      return CType.fromCType(wrongRawCtype)
+      return CType.fromCType(wrongHashCtype)
+    }).toThrow()
+    expect(() => {
+      return CType.fromCType(faultySchemaCtype)
     }).toThrow()
   })
+
   it('compresses and decompresses the ctype object', () => {
     expect(CTypeUtils.compressSchema(rawCType)).toEqual(compressedCType[2])
 
@@ -141,11 +151,7 @@ describe('blank ctypes', () => {
     type: 'object',
   }
 
-  const icytype1: ICType = {
-    schema: ctypeSchema1,
-    owner: identityAlice.address,
-    hash: '',
-  }
+  const ctype2: CType = CType.fromSchema(ctypeSchema1, identityAlice.address)
 
   const ctypeSchema2: ICType['schema'] = {
     $id: 'http://example.com/claimedSomething',
@@ -154,14 +160,7 @@ describe('blank ctypes', () => {
     type: 'object',
   }
 
-  const icytype2: ICType = {
-    schema: ctypeSchema2,
-    owner: identityAlice.address,
-    hash: '',
-  }
-
-  const ctype1 = CType.fromCType(icytype1)
-  const ctype2 = CType.fromCType(icytype2)
+  const ctype1: CType = CType.fromSchema(ctypeSchema2, identityAlice.address)
 
   it('two ctypes with no properties have different hashes if id is different', () => {
     expect(ctype1.owner).toEqual(ctype2.owner)

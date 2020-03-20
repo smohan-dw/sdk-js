@@ -6,14 +6,15 @@
 
 import Ajv from 'ajv'
 import * as jsonabc from 'jsonabc'
-import { checkAddress } from '@polkadot/util-crypto'
+import { getOwner } from './CType.chain'
 import { CTypeModel } from './CTypeSchema'
 import ICType, { CompressedCTypeSchema, CompressedCType } from '../types/CType'
 import Crypto from '../crypto'
+import CType from './CType'
 
 export function verifySchemaWithErrors(
-  object: any,
-  schema: any,
+  object: any, // this might only ever be of type object, please someone confirm
+  schema: string | boolean | object,
   messages?: string[]
 ): boolean {
   const ajv = new Ajv()
@@ -21,23 +22,36 @@ export function verifySchemaWithErrors(
   const result = ajv.validate(schema, object)
   if (!result && ajv.errors) {
     if (messages) {
-      ajv.errors.forEach((error: any) => {
-        messages.push(error.message)
+      ajv.errors.forEach((error: Ajv.ErrorObject) => {
+        if (error.message) {
+          messages.push(error.message)
+        }
       })
     }
   }
   return !!result
 }
 
-export function verifySchema(object: any, schema: any): boolean {
+export function verifySchema(
+  object: any,
+  schema: string | boolean | object
+): boolean {
   return verifySchemaWithErrors(object, schema)
 }
 
-export function verifyClaimStructure(claim: any, schema: any): boolean {
+export function verifyClaimStructure(
+  claim: any,
+  schema: string | boolean | object
+): boolean {
   if (!verifySchema(schema, CTypeModel)) {
     throw new Error('CType does not correspond to schema')
   }
   return verifySchema(claim, schema)
+}
+
+export async function verifyStored(ctype: ICType): Promise<boolean> {
+  const actualOwner = await getOwner(ctype.hash)
+  return ctype.owner ? actualOwner === ctype.owner : actualOwner !== null
 }
 
 export function getHashForSchema(schema: ICType['schema']): string {
@@ -123,6 +137,7 @@ export function compress(cType: ICType): CompressedCType {
       )}`
     )
   }
+  CType.isICType(cType)
   return [cType.hash, cType.owner, compressSchema(cType.schema)]
 }
 
@@ -148,12 +163,13 @@ export function decompress(cType: CompressedCType): ICType {
 }
 
 export default {
-  verifySchema,
+  compress,
   compressSchema,
   decompressSchema,
   decompress,
-  compress,
-  verifySchemaWithErrors,
   verifyClaimStructure,
+  verifySchema,
+  verifySchemaWithErrors,
+  verifyStored,
   getHashForSchema,
 }

@@ -82,13 +82,13 @@ describe('RequestForAttestation', () => {
     )
 
     // check proof on complete data
-    expect(request.verifyData()).toBeTruthy()
+    expect(RequestForAttestation.verifyData(request)).toBeTruthy()
 
     // just deleting a field will result in a wrong proof
     const propertyName = 'a'
     delete request.claim.contents[propertyName]
     delete request.claimHashTree[propertyName]
-    expect(request.verifyData()).toBeFalsy()
+    expect(RequestForAttestation.verifyData(request)).toBeFalsy()
   })
 
   it('throws on wrong hash in claim hash tree', () => {
@@ -101,10 +101,10 @@ describe('RequestForAttestation', () => {
       },
       []
     )
-    // @ts-ignore
+
     request.claimHashTree.a.nonce = '1234'
     expect(() => {
-      request.verifyData()
+      RequestForAttestation.verifyData(request)
     }).toThrow()
   })
 
@@ -126,7 +126,6 @@ describe('RequestForAttestation', () => {
     )
     const reqForAtt: RequestForAttestation = buildRequestForAttestation(
       identityBob,
-      'ctype',
       {
         a: 'a',
         b: 'b',
@@ -259,5 +258,38 @@ describe('RequestForAttestation', () => {
     expect((request.claimHashTree as any).a.nonce).toBeUndefined()
     expect((request.claim.contents as any).b).toBe('b')
     expect((request.claimHashTree as any).b.nonce).toBeDefined()
+  })
+  // it('should throw error on faulty constructor input', () => {
+  //   const builtRequest = buildRequestForAttestation(
+  //     identityBob,
+  //     {
+  //       a: 'a',
+  //       b: 'b',
+  //       c: 'c',
+  //     },
+  //     []
+  //   )
+
+  //   const builtRequestWithLegitimation = buildRequestForAttestation(
+  //     identityBob,
+  //     {
+  //       a: 'a',
+  //       b: 'b',
+  //       c: 'c',
+  //     },
+  //     [legitimation]
+  //   )
+  // })
+  fit('checks Object iteration', () => {
+    const builtRequest = buildRequestForAttestation(
+      identityBob,
+      {
+        a: 'a',
+        b: 'b',
+        c: 'c',
+      },
+      []
+    )
+    expect(builtRequest instanceof RequestForAttestation).toEqual(true)
   })
 })

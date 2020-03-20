@@ -1,4 +1,3 @@
-import * as crypto from '@polkadot/util-crypto'
 import Identity from '../identity/Identity'
 import AttestedClaim from './AttestedClaim'
 import AttestedClaimUtils from './AttestedClaim.utils'
@@ -118,18 +117,18 @@ describe('RequestForAttestation', () => {
     )
 
     // check proof on complete data
-    expect(attestedClaim.verifyData()).toBeTruthy()
+    expect(AttestedClaim.verifyData(attestedClaim)).toBeTruthy()
 
     // build a repesentation excluding claim properties and verify proof
     const correctPresentation = attestedClaim.createPresentation(['a'])
-    expect(correctPresentation.verifyData()).toBeTruthy()
+    expect(AttestedClaim.verifyData(correctPresentation)).toBeTruthy()
 
     // just deleting a field will result in a wrong proof
     const falsePresentation = attestedClaim.createPresentation([])
     const propertyName = 'a'
     delete falsePresentation.request.claim.contents[propertyName]
     delete falsePresentation.request.claimHashTree[propertyName]
-    expect(falsePresentation.verifyData()).toBeFalsy()
+    expect(AttestedClaim.verifyData(falsePresentation)).toBeFalsy()
   })
 
   it('compresses and decompresses the attested claims object', () => {
