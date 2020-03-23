@@ -188,7 +188,7 @@ export default class RequestForAttestation implements IRequestForAttestation {
    * ```
    */
   public constructor(requestForAttestationInput: IRequestForAttestation) {
-    RequestForAttestationUtils.errorCheck(requestForAttestationInput)
+    RequestForAttestation.isIRequestForAttestation(requestForAttestationInput)
     this.claim = requestForAttestationInput.claim
     this.claimOwner = requestForAttestationInput.claimOwner
     this.cTypeHash = requestForAttestationInput.cTypeHash
@@ -207,8 +207,6 @@ export default class RequestForAttestation implements IRequestForAttestation {
     this.claimHashTree = requestForAttestationInput.claimHashTree
     this.rootHash = requestForAttestationInput.rootHash
     this.claimerSignature = requestForAttestationInput.claimerSignature
-    RequestForAttestation.verifySignature(this)
-    RequestForAttestation.verifyData(this)
   }
 
   /**

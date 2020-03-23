@@ -5,6 +5,7 @@
  */
 
 import * as jsonabc from 'jsonabc'
+import RequestForAttestation from './RequestForAttestation'
 import ClaimUtils from '../claim/Claim.utils'
 import AttestedClaimUtils from '../attestedclaim/AttestedClaim.utils'
 import IAttestedClaim, { CompressedAttestedClaim } from '../types/AttestedClaim'
@@ -15,28 +16,6 @@ import IRequestForAttestation, {
   CompressedClaimHashTree,
   CompressedRequestForAttestation,
 } from '../types/RequestForAttestation'
-
-export function errorCheck(
-  requestForAttestation: IRequestForAttestation
-): void {
-  if (
-    !requestForAttestation.claim ||
-    !requestForAttestation.legitimations ||
-    !requestForAttestation.claimOwner ||
-    !requestForAttestation.claimerSignature ||
-    !requestForAttestation.claimHashTree ||
-    !requestForAttestation.cTypeHash ||
-    !requestForAttestation.rootHash
-  ) {
-    throw new Error(
-      `Property Not Provided while building RequestForAttestation: ${JSON.stringify(
-        requestForAttestation,
-        null,
-        2
-      )}`
-    )
-  }
-}
 
 /**
  *  Compresses an nonce and hash from a [[ClaimHashTree]] or [[RequestForAttestation]] properties.
@@ -159,7 +138,7 @@ function decompressLegitimation(
 export function compress(
   reqForAtt: IRequestForAttestation
 ): CompressedRequestForAttestation {
-  errorCheck(reqForAtt)
+  RequestForAttestation.isIRequestForAttestation(reqForAtt)
   return [
     ClaimUtils.compress(reqForAtt.claim),
     compressClaimHashTree(reqForAtt.claimHashTree),
@@ -201,7 +180,6 @@ export function decompress(
 }
 
 export default {
-  errorCheck,
   decompress,
   decompressNonceAndHash,
   decompressLegitimation,
