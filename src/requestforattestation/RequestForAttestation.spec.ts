@@ -82,7 +82,9 @@ describe('RequestForAttestation', () => {
     const propertyName = 'a'
     delete request.claim.contents[propertyName]
     delete request.claimHashTree[propertyName]
-    expect(RequestForAttestation.verifyData(request)).toBeFalsy()
+    expect(() => {
+      return RequestForAttestation.verifyData(request)
+    }).toThrow()
   })
 
   it('throws on wrong hash in claim hash tree', () => {
@@ -253,7 +255,7 @@ describe('RequestForAttestation', () => {
     expect((request.claim.contents as any).b).toBe('b')
     expect((request.claimHashTree as any).b.nonce).toBeDefined()
   })
-  fit('should throw error on faulty constructor input', () => {
+  it('should throw error on faulty constructor input', () => {
     const builtRequest = buildRequestForAttestation(
       identityBob,
       {

@@ -32,13 +32,7 @@ describe('Claim', () => {
     type: 'object',
   }
 
-  const fromRawCType: ICType = {
-    schema: cType,
-    owner: claimerIdentity.address,
-    hash: '',
-  }
-
-  const testCType = CType.fromCType(fromRawCType)
+  const testCType = CType.fromSchema(cType, claimerIdentity.address)
 
   const claim: IClaim = {
     cTypeHash: testCType.hash,

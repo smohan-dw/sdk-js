@@ -19,12 +19,7 @@ describe('CType', () => {
     type: 'object',
   }
 
-  const fromRawCType: ICType = {
-    schema: rawCType,
-    owner: identityAlice.address,
-    hash: '',
-  }
-  const ctype = CType.fromCType(fromRawCType)
+  const ctype = CType.fromSchema(rawCType, identityAlice.address)
 
   const ctypeMetadata: ICTypeMetadata['metadata'] = {
     title: { default: 'Title' },
