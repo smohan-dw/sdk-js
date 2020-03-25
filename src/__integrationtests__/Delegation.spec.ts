@@ -94,8 +94,8 @@ describe('when there is an account hierarchy', async () => {
         [],
         delegatedNode.id
       )
-      expect(request.verifyData()).toBeTruthy()
-      expect(request.verifySignature()).toBeTruthy()
+      expect(RequestForAttestation.verifyData(request)).toBeTruthy()
+      expect(RequestForAttestation.verifySignature(request)).toBeTruthy()
 
       const attestation = Attestation.fromRequestAndPublicIdentity(
         request,
@@ -108,8 +108,8 @@ describe('when there is an account hierarchy', async () => {
         request,
         attestation
       )
-      expect(attClaim.verifyData()).toBeTruthy()
-      await expect(attClaim.verify()).resolves.toBeTruthy()
+      expect(AttestedClaim.verifyData(attClaim)).toBeTruthy()
+      await expect(AttestedClaim.verify(attClaim)).resolves.toBeTruthy()
 
       // revoke attestation through root
       const result = await attClaim.attestation.revoke(UncleSam)

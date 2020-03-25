@@ -59,7 +59,7 @@ describe('When there is an attester, claimer and ctype drivers license', async (
       [],
       null
     )
-    expect(request.verifyData()).toBeTruthy()
+    expect(RequestForAttestation.verifyData(request)).toBeTruthy()
     expect(request.claim.contents).toMatchObject(content)
   })
 
@@ -76,8 +76,8 @@ describe('When there is an attester, claimer and ctype drivers license', async (
       [],
       null
     )
-    expect(request.verifyData()).toBeTruthy()
-    expect(request.verifySignature()).toBeTruthy()
+    expect(RequestForAttestation.verifyData(request)).toBeTruthy()
+    expect(RequestForAttestation.verifySignature(request)).toBeTruthy()
     const attestation = Attestation.fromRequestAndPublicIdentity(
       request,
       attester.getPublicIdentity()
@@ -85,8 +85,8 @@ describe('When there is an attester, claimer and ctype drivers license', async (
     const status = await attestation.store(attester)
     expect(status.type).toBe('Finalized')
     const aClaim = AttestedClaim.fromRequestAndAttestation(request, attestation)
-    expect(aClaim.verifyData()).toBeTruthy()
-    await expect(aClaim.verify()).resolves.toBeTruthy()
+    expect(AttestedClaim.verifyData(aClaim)).toBeTruthy()
+    await expect(AttestedClaim.verify(aClaim)).resolves.toBeTruthy()
   }, 60_000)
 
   it('should not be possible to attest a claim w/o tokens', async () => {
@@ -102,8 +102,8 @@ describe('When there is an attester, claimer and ctype drivers license', async (
       [],
       null
     )
-    expect(request.verifyData()).toBeTruthy()
-    expect(request.verifySignature()).toBeTruthy()
+    expect(RequestForAttestation.verifyData(request)).toBeTruthy()
+    expect(RequestForAttestation.verifySignature(request)).toBeTruthy()
     const attestation = Attestation.fromRequestAndPublicIdentity(
       request,
       attester.getPublicIdentity()
@@ -113,7 +113,7 @@ describe('When there is an attester, claimer and ctype drivers license', async (
 
     await expect(attestation.store(BobbyBroke)).rejects.toThrow()
     const aClaim = AttestedClaim.fromRequestAndAttestation(request, attestation)
-    await expect(aClaim.verify()).resolves.toBeFalsy()
+    await expect(AttestedClaim.verify(aClaim)).resolves.toBeFalsy()
   }, 60_000)
 
   it('should not be possible to attest a claim on a Ctype that is not on chain', async () => {
@@ -177,7 +177,7 @@ describe('When there is an attester, claimer and ctype drivers license', async (
       const status = await attestation.store(attester)
       expect(status.type).toBe('Finalized')
       AttClaim = AttestedClaim.fromRequestAndAttestation(request, attestation)
-      await expect(AttClaim.verify()).resolves.toBeTruthy()
+      await expect(AttestedClaim.verify(AttClaim)).resolves.toBeTruthy()
     }, 60_000)
 
     it('should not be possible to attest the same claim twice', async () => {
@@ -187,17 +187,17 @@ describe('When there is an attester, claimer and ctype drivers license', async (
     }, 15000)
 
     it('should not be possible for the claimer to revoke an attestation', async () => {
-      await expect(revoke(AttClaim.getHash(), claimer)).rejects.toThrowError(
-        'not permitted'
-      )
-      await expect(AttClaim.verify()).resolves.toBeTruthy()
+      await expect(
+        revoke(AttClaim.attestation.claimHash, claimer)
+      ).rejects.toThrowError('not permitted')
+      await expect(AttestedClaim.verify(AttClaim)).resolves.toBeTruthy()
     }, 30000)
 
     it('should be possible for the attester to revoke an attestation', async () => {
-      await expect(AttClaim.verify()).resolves.toBeTruthy()
-      const status = await revoke(AttClaim.getHash(), attester)
+      await expect(AttestedClaim.verify(AttClaim)).resolves.toBeTruthy()
+      const status = await revoke(AttClaim.attestation.claimHash, attester)
       expect(status.type).toBe('Finalized')
-      await expect(AttClaim.verify()).resolves.toBeFalsy()
+      await expect(AttestedClaim.verify(AttClaim)).resolves.toBeFalsy()
     }, 15000)
   })
 
@@ -259,8 +259,10 @@ describe('When there is an attester, claimer and ctype drivers license', async (
         LicenseGranted
       )
       await Promise.all([
-        expect(License.verify()).resolves.toBeTruthy(),
-        expect(LicenseAuthorizationGranted.verify()).resolves.toBeTruthy(),
+        expect(AttestedClaim.verify(License)).resolves.toBeTruthy(),
+        expect(
+          Attestation.verify(LicenseAuthorizationGranted)
+        ).resolves.toBeTruthy(),
       ])
     }, 60_000)
   })
