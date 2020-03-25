@@ -30,8 +30,7 @@ export async function CtypeOnChain(ctype: CType): Promise<boolean> {
     .catch(() => false)
 }
 
-export const DriversLicense = CType.fromCType({
-  schema: {
+export const DriversLicense = CType.fromSchema({
     $id: 'DriversLicense',
     $schema: 'http://kilt-protocol.org/draft-01/ctype#',
     properties: {
@@ -43,11 +42,9 @@ export const DriversLicense = CType.fromCType({
       },
     },
     type: 'object',
-  } as ICType['schema'],
-} as ICType)
+  } as ICType['schema'])
 
-export const IsOfficialLicenseAuthority = CType.fromCType({
-  schema: {
+export const IsOfficialLicenseAuthority = CType.fromSchema({
     $id: 'LicenseAuthority',
     $schema: 'http://kilt-protocol.org/draft-01/ctype#',
     properties: {
@@ -59,5 +56,4 @@ export const IsOfficialLicenseAuthority = CType.fromCType({
       },
     },
     type: 'object',
-  } as ICType['schema'],
-} as ICType)
+  } as ICType['schema'])
