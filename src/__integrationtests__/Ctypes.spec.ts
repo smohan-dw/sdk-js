@@ -12,16 +12,14 @@ import { Identity } from '..'
 describe('When there is an CtypeCreator and a verifier', async () => {
   const CtypeCreator = faucet
 
-  const ctype = CType.fromCType({
-    schema: {
-      $id: 'http://example.com/ctype-10',
-      $schema: 'http://kilt-protocol.org/draft-01/ctype#',
-      properties: {
-        name: { type: 'string' },
-      },
-      type: 'object',
-    } as ICType['schema'],
-  } as ICType)
+  const ctype = CType.fromSchema({
+    $id: 'http://example.com/ctype-10',
+    $schema: 'http://kilt-protocol.org/draft-01/ctype#',
+    properties: {
+      name: { type: 'string' },
+    },
+    type: 'object',
+  } as ICType['schema'])
 
   it('should not be possible to create a claim type w/o tokens', async () => {
     const BobbyBroke = Identity.buildFromMnemonic(Identity.generateMnemonic())
@@ -48,19 +46,17 @@ describe('When there is an CtypeCreator and a verifier', async () => {
   }, 30000)
 
   it('should tell when a ctype is not on chain', async () => {
-    const iAmNotThere = CType.fromCType({
-      schema: {
-        $id: 'http://example.com/ctype-2',
-        $schema: 'http://kilt-protocol.org/draft-01/ctype#',
-        properties: {
-          game: { type: 'string' },
-        },
-        type: 'object',
-      } as ICType['schema'],
-    } as ICType)
+    const iAmNotThere = CType.fromSchema({
+      $id: 'http://example.com/ctype-2',
+      $schema: 'http://kilt-protocol.org/draft-01/ctype#',
+      properties: {
+        game: { type: 'string' },
+      },
+      type: 'object',
+    } as ICType['schema'])
 
-    const iAmNotThereWowner = CType.fromCType({
-      schema: {
+    const iAmNotThereWowner = CType.fromSchema(
+      {
         $id: 'http://example.com/ctype-2',
         $schema: 'http://kilt-protocol.org/draft-01/ctype#',
         properties: {
@@ -68,8 +64,8 @@ describe('When there is an CtypeCreator and a verifier', async () => {
         },
         type: 'object',
       } as ICType['schema'],
-      owner: CtypeCreator.address,
-    } as ICType)
+      CtypeCreator.address
+    )
 
     await Promise.all([
       expect(iAmNotThere.verifyStored()).resolves.toBeFalsy(),
