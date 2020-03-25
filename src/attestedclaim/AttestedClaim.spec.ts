@@ -163,11 +163,4 @@ describe('RequestForAttestation', () => {
       legitimation.compress()
     }).toThrow()
   })
-  it('should throw error on faulty constructor input', () => {
-    const [boolean] = crypto.checkAddress(
-      identityAlice.address.replace('D', 'D'),
-      42
-    )
-    console.log(boolean)
-  })
 })

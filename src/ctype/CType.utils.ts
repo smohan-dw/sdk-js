@@ -11,6 +11,7 @@ import { CTypeModel } from './CTypeSchema'
 import ICType, { CompressedCTypeSchema, CompressedCType } from '../types/CType'
 import Crypto from '../crypto'
 import CType from './CType'
+import { validateAddress } from '../util/DataUtils'
 
 export function verifySchemaWithErrors(
   object: any, // this might only ever be of type object, please someone confirm
@@ -125,7 +126,7 @@ export function compress(cType: ICType): CompressedCType {
   if (
     !cType.hash ||
     (typeof cType.owner === 'string'
-      ? !checkAddress(cType.owner, 42)[0]
+      ? !validateAddress(cType.owner, 'CType Owner')
       : !(cType.owner === null)) ||
     !cType.schema
   ) {
