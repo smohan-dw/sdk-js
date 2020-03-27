@@ -19,6 +19,7 @@ import IAttestation, { CompressedAttestation } from '../types/Attestation'
 import { revoke, query, store } from './Attestation.chain'
 import IPublicIdentity from '../types/PublicIdentity'
 import AttestationUtils from './Attestation.utils'
+import { hashObjectAsStr } from '../crypto'
 
 export default class Attestation implements IAttestation {
   /**
@@ -189,11 +190,10 @@ export default class Attestation implements IAttestation {
     attestation: IAttestation,
     claimHash: string = attestation.claimHash
   ): Promise<boolean> {
+    if (attestation.revoked) return false
     // Query attestation by claimHash. null if no attestation is found on-chain for this hash
     const chainAttestation: Attestation | null = await query(claimHash)
-    return Promise.resolve(
-      !!(chainAttestation && chainAttestation.isAttestationValid(attestation))
-    )
+    return !!chainAttestation && this.isEqual(attestation, chainAttestation)
   }
 
   /**
@@ -218,15 +218,12 @@ export default class Attestation implements IAttestation {
   }
 
   /**
-   * Checks if the attestation is valid. An attestation is valid if it:
-   * * exists;
-   * * and has the correct owner;
-   * * and is not revoked.
+   * Checks if attestations A and B are equal by hashing both and comparing the result.
    *
    * @param attestation - The attestation to check.
-   * @returns Whether the attestation is valid.
+   * @returns Whether the two attestations are equal.
    */
-  private isAttestationValid(attestation: IAttestation): boolean {
-    return this && this.owner === attestation.owner && !this.revoked
+  public static isEqual(A: IAttestation, B: IAttestation): boolean {
+    return hashObjectAsStr(A) === hashObjectAsStr(B)
   }
 }

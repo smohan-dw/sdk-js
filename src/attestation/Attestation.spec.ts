@@ -1,4 +1,4 @@
-import { Text, Data } from '@polkadot/types'
+import { Data } from '@polkadot/types'
 import Bool from '@polkadot/types/primitive/Bool'
 import AccountId from '@polkadot/types/primitive/Generic/AccountId'
 import { Tuple, Option } from '@polkadot/types/codec'
@@ -56,7 +56,7 @@ describe('Attestation', () => {
       const tuple = new Option(
         Tuple,
         new Tuple(
-          [Data, AccountId, Text, Bool],
+          [Data, AccountId, Option, Bool],
           [testCType.hash, identityAlice.address, undefined, false]
         )
       )
@@ -92,7 +92,7 @@ describe('Attestation', () => {
           Tuple,
           new Tuple(
             // Attestations: claim-hash -> (ctype-hash, account, delegation-id?, revoked)
-            [Data, AccountId, Text, Bool],
+            [Data, AccountId, Option, Bool],
             [testCType.hash, identityAlice.address, undefined, true]
           )
         )
