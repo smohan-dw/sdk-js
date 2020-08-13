@@ -44,10 +44,14 @@ jobs:
         image: kiltprotocol/mashnet-node:develop
         ports:
           - 9944:9944
-        options:
-          entrypoint: './target/release/mashnet-node --dev --ws-port 9944 --ws-external'
+        options: --name=develop-node
 
     steps:
+      - name: start dev chain
+        run: |
+          docker start develop-node
+          docker exec -d develop-node ./target/release/mashnet-node --dev --ws-port 9944 --ws-external
+
       - uses: actions/checkout@v1
 
       - name: Use Node.js 10
@@ -69,8 +73,7 @@ jobs:
         image: kiltprotocol/mashnet-node:develop
         ports:
           - 9944:9944
-        options:
-          entrypoint: './target/release/mashnet-node --dev --ws-port 9944 --ws-external'
+        options: --name=develop-node
 
     steps:
       - uses: actions/checkout@v1
@@ -79,6 +82,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10
+
+      - name: start dev chain
+        run: |
+          docker start develop-node
+          docker exec -d develop-node ./target/release/mashnet-node --dev --ws-port 9944 --ws-external
 
       - name: yarn install and test
         timeout-minutes: 10
@@ -94,8 +102,7 @@ jobs:
         image: kiltprotocol/mashnet-node:develop
         ports:
           - 9944:9944
-        options:
-          entrypoint: './target/release/mashnet-node --dev --ws-port 9944 --ws-external'
+        options: --name=develop-node
 
     steps:
       - uses: actions/checkout@v1
@@ -104,6 +111,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10
+
+      - name: start dev chain
+        run: |
+          docker start develop-node
+          docker exec -d develop-node ./target/release/mashnet-node --dev --ws-port 9944 --ws-external
 
       - name: yarn install and test
         timeout-minutes: 10
