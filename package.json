@@ -35,7 +35,7 @@
     "url": "git+https://github.com/KILTprotocol/sdk-js.git"
   },
   "engines": {
-    "node": ">=10.0"
+    "node": ">=10.22.0"
   },
   "publishConfig": {
     "access": "restricted",
@@ -48,8 +48,8 @@
   },
   "homepage": "https://github.com/KILTprotocol/sdk-js#readme",
   "devDependencies": {
-    "@commitlint/cli": "^9.0.1",
-    "@commitlint/config-conventional": "^9.0.1",
+    "@commitlint/cli": "^10.0.0",
+    "@commitlint/config-conventional": "^10.0.0",
     "@types/jest": "^26.0.7",
     "@types/uuid": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^3.7.1",
