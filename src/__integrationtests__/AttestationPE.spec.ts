@@ -12,7 +12,8 @@ import { Claim, IBlockchainApi, IClaim, Message } from '..'
 import { Attester, Claimer, Verifier } from '../actor'
 import { ClaimerAttestationSession } from '../actor/Claimer'
 import { IS_IN_BLOCK, submitTxWithReSign } from '../blockchain/Blockchain.utils'
-import getCached, { DEFAULT_WS_ADDRESS } from '../blockchainApiConnection'
+import { getNodeAddress } from '../config/ConfigService'
+import getCached from '../blockchainApiConnection'
 import Credential from '../credential'
 import Identity, { AttesterIdentity } from '../identity'
 import constants from '../test/constants'
@@ -21,7 +22,7 @@ import { CtypeOnChain, DriversLicense, FaucetSeed } from './utils'
 
 let blockchain: IBlockchainApi | undefined
 beforeAll(async () => {
-  blockchain = await getCached(DEFAULT_WS_ADDRESS)
+  blockchain = await getCached(getNodeAddress())
 })
 
 describe('Privacy enhanced claim, attestation, verification process', () => {
