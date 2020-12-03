@@ -12,6 +12,7 @@ import Kilt, {
 } from '../src'
 import { BlockchainUtils } from '../src/blockchain'
 import constants from '../src/test/constants'
+import { setConfiguration } from '../src/config/ConfigService'
 
 const NODE_URL = 'ws://127.0.0.1:9944'
 const SEP = '_'
@@ -25,6 +26,7 @@ async function setup(): Promise<{
   console.log(
     ((s) => s.padEnd(40 + s.length / 2, SEP).padStart(80, SEP))(' SETUP ')
   )
+  setConfiguration(NODE_URL)
   // ------------------------- Attester ----------------------------------------
 
   // To get an attestation, we need an Attester
