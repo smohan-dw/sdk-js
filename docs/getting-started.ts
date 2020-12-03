@@ -36,7 +36,7 @@ async function main(): Promise<void> {
   })
 
   /* To store the CTYPE on the blockchain, you have to call: */
-  ConfigService.setConfiguration(NODE_URL)
+  Kilt.config({ host: NODE_URL })
   Kilt.connect(ConfigService.getNodeAddress())
   const identity = await Kilt.Identity.buildFromMnemonic(
     'receive clutch item involve chaos clutch furnace arrest claw isolate okay together'

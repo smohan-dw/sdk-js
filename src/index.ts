@@ -27,7 +27,7 @@ import {
   PublicAttesterIdentity,
   PublicIdentity,
 } from './identity'
-import { connect, disconnect } from './kilt'
+import { connect, disconnect, config } from './kilt'
 import Message from './messaging'
 import Quote, { QuoteSchema, QuoteUtils } from './quote'
 import RequestForAttestation, {
@@ -109,6 +109,7 @@ export {
 
 // ---- Default export for ease of use ----
 export default {
+  config,
   connect,
   disconnect,
   Balance,
