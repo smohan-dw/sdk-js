@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest --coverage --group=-integration",
     "test:ci": "jest --ci --coverage --group=-integration",
-    "test:integration:run": "jest --group=integration -b -w 3 --silent",
+    "test:integration:run": "DEFAULT_WS_ADDRESS=ws://127.0.0.1:9944 jest --group=integration -b -w 3 --silent",
     "test:integration": "{ lsof -i :9944 > /dev/null && yarn test:integration:run; } || echo 'Can not connect to chain. Is it running?'; exit 1;",
     "test:watch": "yarn test --watch",
     "lint": "eslint 'src/**'",
