@@ -1,6 +1,6 @@
 import * as gabi from '@kiltprotocol/portablegabi'
 import AttestedClaim from '../attestedclaim/AttestedClaim'
-import { factory as LoggerFactory } from '../config/ConfigLog'
+import { factory as LoggerFactory } from '../config/ConfigService'
 import CType from '../ctype/CType'
 import {
   ERROR_MESSAGE_TYPE,

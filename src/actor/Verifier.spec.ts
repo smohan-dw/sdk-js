@@ -18,7 +18,7 @@ import {
   ERROR_PE_VERIFICATION,
   ERROR_MESSAGE_TYPE,
 } from '../errorhandling/SDKErrors'
-import { factory as LoggerFactory } from '../config/ConfigLog'
+import { factory as LoggerFactory } from '../config/ConfigService'
 
 jest.mock('../blockchainApiConnection/BlockchainApiConnection')
 
