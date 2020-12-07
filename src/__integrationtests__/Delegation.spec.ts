@@ -13,7 +13,7 @@ import {
   IS_READY,
   submitTxWithReSign,
 } from '../blockchain/Blockchain.utils'
-import { getNodeAddress } from '../config/ConfigService'
+import { configuration } from '../config/ConfigService'
 import getCached from '../blockchainApiConnection'
 import Claim from '../claim/Claim'
 import Credential from '../credential/Credential'
@@ -34,11 +34,12 @@ import {
   wannabeAlice,
   wannabeBob,
   wannabeFaucet,
+  WS_ADDRESS,
 } from './utils'
 
 let blockchain: IBlockchainApi | undefined
 beforeAll(async () => {
-  blockchain = await getCached(getNodeAddress())
+  blockchain = await getCached((configuration.host = WS_ADDRESS))
 })
 
 describe('when there is an account hierarchy', () => {

@@ -6,7 +6,6 @@ import Kilt, {
   ISubmitAttestationForClaim,
   ISubmitClaimsForCTypesClassic,
   Identity,
-  ConfigService,
 } from '../src'
 
 const NODE_URL = 'ws://127.0.0.1:9944'
@@ -36,8 +35,7 @@ async function main(): Promise<void> {
   })
 
   /* To store the CTYPE on the blockchain, you have to call: */
-  Kilt.config({ host: NODE_URL })
-  Kilt.connect(ConfigService.getNodeAddress())
+  Kilt.config({ address: NODE_URL })
   const identity = await Kilt.Identity.buildFromMnemonic(
     'receive clutch item involve chaos clutch furnace arrest claw isolate okay together'
   )
@@ -188,4 +186,4 @@ async function main(): Promise<void> {
   }
 }
 // execute
-main().finally(() => Kilt.disconnect(ConfigService.getNodeAddress()))
+main().finally(() => Kilt.disconnect())
