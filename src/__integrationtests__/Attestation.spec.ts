@@ -8,14 +8,12 @@ import { IAttestedClaim, IClaim } from '..'
 import Attestation from '../attestation/Attestation'
 import { revoke } from '../attestation/Attestation.chain'
 import AttestedClaim from '../attestedclaim/AttestedClaim'
-import { IBlockchainApi } from '../blockchain/Blockchain'
 import {
   IS_IN_BLOCK,
   IS_READY,
   submitTxWithReSign,
 } from '../blockchain/Blockchain.utils'
-import { configuration } from '../config/ConfigService'
-import getCached from '../blockchainApiConnection'
+import { config, disconnect } from '../kilt'
 import Claim from '../claim/Claim'
 import Credential from '../credential/Credential'
 import CType from '../ctype/CType'
@@ -35,10 +33,9 @@ import {
   WS_ADDRESS,
 } from './utils'
 
-let blockchain: IBlockchainApi | undefined
 let alice: Identity
 beforeAll(async () => {
-  blockchain = await getCached((configuration.host = WS_ADDRESS))
+  config({ address: WS_ADDRESS })
   alice = await Identity.buildFromURI('//Alice')
 })
 
@@ -357,5 +354,5 @@ describe('When there is an attester, claimer and ctype drivers license', () => {
 })
 
 afterAll(() => {
-  if (typeof blockchain !== 'undefined') blockchain.api.disconnect()
+  disconnect()
 })

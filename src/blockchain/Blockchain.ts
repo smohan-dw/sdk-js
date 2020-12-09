@@ -9,6 +9,7 @@
  */
 
 import * as gabi from '@kiltprotocol/portablegabi'
+import { PgabiModName } from '@kiltprotocol/portablegabi/build/types/Chain'
 import { ApiPromise, SubmittableResult } from '@polkadot/api'
 import { SubmittableExtrinsic } from '@polkadot/api/promise/types'
 import { Header } from '@polkadot/types/interfaces/types'
@@ -76,7 +77,10 @@ export default class Blockchain implements IBlockchainApi {
 
   public constructor(api: ApiPromise) {
     this.api = api
-    this.portablegabi = new gabi.Blockchain('portablegabi', this.api as any)
+    this.portablegabi = new gabi.Blockchain(
+      'portablegabi',
+      this.api as ApiPromise & gabi.IPortablegabiApi<PgabiModName>
+    )
     this.accountNonces = new Map<Identity['address'], BN>()
   }
 
