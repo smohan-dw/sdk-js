@@ -1,3 +1,8 @@
+/**
+ * @packageDocumentation
+ * @group unit/vc-export
+ * @ignore
+ */
 import {
   Attestation,
   IRequestForAttestation,
@@ -23,7 +28,7 @@ jest.mock('jsonld', () => {
   }
 })
 
-jest.mock('../../attestation/Attestation.chain', () => {
+jest.mock('@kiltprotocol/core/lib/attestation/Attestation.chain', () => {
   return { query: jest.fn() }
 })
 
@@ -205,7 +210,7 @@ describe('proofs', () => {
   })
 
   describe('on-chain proof', () => {
-    require('../../attestation/Attestation.chain').query.mockResolvedValue(
+    require('@kiltprotocol/core/lib/attestation/Attestation.chain').query.mockResolvedValue(
       Attestation.fromAttestation(credential.attestation)
     )
 
